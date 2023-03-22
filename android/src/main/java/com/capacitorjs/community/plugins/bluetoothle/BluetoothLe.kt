@@ -277,8 +277,12 @@ class BluetoothLe : Plugin() {
         val scanFilters = getScanFilters(call) ?: return
         val scanSettings = getScanSettings(call) ?: return
         val namePrefix = call.getString("namePrefix", "") as String
-
-        deviceScanner?.stopScanning()
+        try {
+            deviceScanner?.stopScanning()
+        } catch (e: IllegalStateException) {
+            Logger.error(TAG, "Error in stopLEScan: ${e.localizedMessage}", e)
+            return
+        }
         deviceScanner = DeviceScanner(
             context,
             bluetoothAdapter!!,
@@ -312,8 +316,12 @@ class BluetoothLe : Plugin() {
         val scanSettings = getScanSettings(call) ?: return
         val namePrefix = call.getString("namePrefix", "") as String
         val allowDuplicates = call.getBoolean("allowDuplicates", false) as Boolean
-
-        deviceScanner?.stopScanning()
+        try {
+            deviceScanner?.stopScanning()
+        } catch (e: IllegalStateException) {
+            Logger.error(TAG, "Error in stopLEScan: ${e.localizedMessage}", e)
+            return
+        }
         deviceScanner = DeviceScanner(
             context,
             bluetoothAdapter!!,
